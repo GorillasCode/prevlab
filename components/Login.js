@@ -27,8 +27,9 @@ export default function Login() {
           open: true,
           type: "error",
           msg: loginResponse.data.msg,
-        });
+        }); 
       }
+  
       setFeedback({
         open: true,
         type: "success",
@@ -38,6 +39,11 @@ export default function Login() {
       return router.push("prevlab/users/dashboard");
     } catch (error) {
       console.log(error);
+      setFeedback({
+        open: true,
+        type: "error",
+        msg: "Email ou senha errados.",
+      });
     }
   };
   return (
