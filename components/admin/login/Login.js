@@ -41,7 +41,7 @@ export default function Login() {
     } catch (error) {
       console.log(error)
     } finally {
-      setLoading(false)
+      setTimeout(() => setLoading(false), 2000)
     }
   }
   return (

@@ -47,7 +47,7 @@ export default function Login() {
         msg: 'Email ou senha errados.'
       })
     } finally {
-      setLoading(false)
+      setTimeout(() => setLoading(false), 2000)
     }
   }
   return (
