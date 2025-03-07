@@ -1,49 +1,49 @@
-import React from 'react'
-import { useRouter } from 'next/router'
-import { useCookies } from 'react-cookie'
-import FeedBack from '../../FeedBack'
+import React from 'react';
+import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
+import FeedBack from '../../FeedBack';
 
-import { prevlabAxiosInstace } from '../../../services/prevlabAxios'
+import { prevlabAxiosInstace } from '../../../services/prevlabAxios';
 export default function Login() {
-  const router = useRouter()
-  const email = React.useRef(null)
-  const password = React.useRef(null)
-  const [cookies, setCookie, removeCookie] = useCookies()
-  const [loading, setLoading] = React.useState(false)
+  const router = useRouter();
+  const email = React.useRef(null);
+  const password = React.useRef(null);
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const [loading, setLoading] = React.useState(false);
   const [feedback, setFeedback] = React.useState({
     open: false,
     type: 'success',
     msg: 'feedback'
-  })
+  });
 
   const handleLogin = async evt => {
-    evt.preventDefault()
-    setLoading(true)
+    evt.preventDefault();
+    setLoading(true);
     try {
       const loginResponse = await prevlabAxiosInstace.auth._adminLogin(
         email.current.value,
         password.current.value
-      )
+      );
       if (loginResponse.data.error) {
         return setFeedback({
           open: true,
           type: 'error',
           msg: loginResponse.data.msg
-        })
+        });
       }
       setFeedback({
         open: true,
         type: 'success',
         msg: 'Bem vindo!'
-      })
-      setCookie('userInfo', loginResponse.data.data)
-      return router.push('/prevlab/admin/dashboard')
+      });
+      setCookie('userInfo', loginResponse.data.data);
+      return router.push('/prevlab/admin/dashboard');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setTimeout(() => setLoading(false), 2000)
+      setTimeout(() => setLoading(false), 2000);
     }
-  }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-600 py-12 px-4 sm:px-6 lg:px-8 ">
       <FeedBack obj={feedback} close={setFeedback} />
@@ -128,5 +128,5 @@ export default function Login() {
         </form>
       </div>
     </div>
-  )
+  );
 }
