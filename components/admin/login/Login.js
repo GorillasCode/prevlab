@@ -1,46 +1,49 @@
-import React from 'react'
-import { useRouter } from 'next/router'
-import { useCookies } from 'react-cookie'
-import FeedBack from '../../FeedBack'
+import React from 'react';
+import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
+import FeedBack from '../../FeedBack';
 
-import { prevlabAxiosInstace } from '../../../services/prevlabAxios'
+import { prevlabAxiosInstace } from '../../../services/prevlabAxios';
 export default function Login() {
-  const router = useRouter()
-  const email = React.useRef(null)
-  const password = React.useRef(null)
-  const [cookies, setCookie, removeCookie] = useCookies()
+  const router = useRouter();
+  const email = React.useRef(null);
+  const password = React.useRef(null);
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const [loading, setLoading] = React.useState(false);
   const [feedback, setFeedback] = React.useState({
     open: false,
     type: 'success',
     msg: 'feedback'
-  })
+  });
 
   const handleLogin = async evt => {
-    evt.preventDefault()
+    evt.preventDefault();
+    setLoading(true);
     try {
       const loginResponse = await prevlabAxiosInstace.auth._adminLogin(
         email.current.value,
         password.current.value
-      )
-      console.log(loginResponse)
+      );
       if (loginResponse.data.error) {
         return setFeedback({
           open: true,
           type: 'error',
           msg: loginResponse.data.msg
-        })
+        });
       }
       setFeedback({
         open: true,
         type: 'success',
         msg: 'Bem vindo!'
-      })
-      setCookie('userInfo', loginResponse.data.data)
-      return router.push('/prevlab/admin/dashboard')
+      });
+      setCookie('userInfo', loginResponse.data.data);
+      return router.push('/prevlab/admin/dashboard');
     } catch (error) {
-      console.log(error)
+      console.log(error);
+    } finally {
+      setTimeout(() => setLoading(false), 2000);
     }
-  }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-600 py-12 px-4 sm:px-6 lg:px-8 ">
       <FeedBack obj={feedback} close={setFeedback} />
@@ -93,28 +96,37 @@ export default function Login() {
           <div>
             <button
               onClick={handleLogin}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-800 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+              {loading ? (
                 <svg
-                  className="h-5 w-5 text-green-500 group-hover:text-green-400"
+                  className="animate-spin h-5 w-5 text-white"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
+                  fill="none"
+                  viewBox="0 0 24 24"
                 >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
                   <path
-                    fillRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clipRule="evenodd"
-                  />
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
                 </svg>
-              </span>
-              Sign in
+              ) : (
+                'Sign In'
+              )}
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }

@@ -1,22 +1,24 @@
-import React from "react";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useCookies } from "react-cookie";
-import { prevlabAxiosInstace } from "../services/prevlabAxios";
-import FeedBack from "../components/FeedBack";
+import React from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
+import { prevlabAxiosInstace } from '../services/prevlabAxios';
+import FeedBack from '../components/FeedBack';
 export default function Login() {
   const email = React.useRef(null);
   const password = React.useRef(null);
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies();
+  const [loading, setLoading] = React.useState(false);
   const [feedback, setFeedback] = React.useState({
     open: false,
-    type: "success",
-    msg: "feedback",
+    type: 'success',
+    msg: 'feedback'
   });
 
-  const handleLogin = async (evt) => {
+  const handleLogin = async evt => {
     evt.preventDefault();
+    setLoading(true);
     try {
       const loginResponse = await prevlabAxiosInstace.auth._login(
         email.current.value,
@@ -25,25 +27,27 @@ export default function Login() {
       if (loginResponse.data.error) {
         return setFeedback({
           open: true,
-          type: "error",
-          msg: loginResponse.data.msg,
-        }); 
+          type: 'error',
+          msg: loginResponse.data.msg
+        });
       }
-  
+
       setFeedback({
         open: true,
-        type: "success",
-        msg: "Bem vindo!",
+        type: 'success',
+        msg: 'Bem vindo!'
       });
-      setCookie("userInfo", loginResponse.data.data);
-      return router.push("prevlab/users/dashboard");
+      setCookie('userInfo', loginResponse.data.data);
+      return router.push('prevlab/users/dashboard');
     } catch (error) {
       console.log(error);
       setFeedback({
         open: true,
-        type: "error",
-        msg: "Email ou senha errados.",
+        type: 'error',
+        msg: 'Email ou senha errados.'
       });
+    } finally {
+      setTimeout(() => setLoading(false), 2000);
     }
   };
   return (
@@ -101,24 +105,33 @@ export default function Login() {
           <div>
             <button
               onClick={handleLogin}
+              disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+              {loading ? (
                 <svg
-                  className="h-5 w-5 text-green-500 group-hover:text-green-400"
+                  className="animate-spin h-5 w-5 text-white"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
+                  fill="none"
+                  viewBox="0 0 24 24"
                 >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
                   <path
-                    fillRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clipRule="evenodd"
-                  />
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
                 </svg>
-              </span>
-              Logar
+              ) : (
+                'Logar'
+              )}
             </button>
           </div>
         </form>
