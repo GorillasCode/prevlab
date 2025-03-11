@@ -37,30 +37,33 @@ function AdminExams() {
                   </p>
                 </div>
                 <div className="flex-col">
-                  {!patient._id ? (
-                    <button
-                      onClick={() => setOpenBackdropTable(true)}
-                      className="inline-flex justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                    >
-                      Selecionar paciente
-                    </button>
-                  ) : null}
+                  <button
+                    onClick={() => setOpenBackdropTable(true)}
+                    className="inline-flex justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  >
+                    Selecionar paciente
+                  </button>
                 </div>
               </div>
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
+              <h3 className="text-lg font-medium leading-6 text-gray-900 mt-6">
                 Cadastro de Exames
               </h3>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-600 mb-6">
                 This information will be displayed publicly so be careful what
-                you share.
+                you share. Select the patient to access the exam.
               </p>
             </div>
           </div>
           <button
-            className="inline-flex justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
+              patient._id
+                ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
+                : 'bg-gray-400 cursor-not-allowed'
+            }`}
             onClick={() => setIsModalOpen(true)}
+            disabled={!patient._id}
           >
-            Novo Exame
+            Abrir Exame
           </button>
           <ExamModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <ExamsForm userId={patient._id} />
