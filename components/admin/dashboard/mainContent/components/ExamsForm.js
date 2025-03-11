@@ -1,17 +1,11 @@
 import React from 'react';
 import { useCookies } from 'react-cookie';
-import PatientTable from './tables/PatientsTable';
 import { prevlabAxiosInstace } from '../../../../../services/prevlabAxios';
 import LoadingBackdrop from '../../../../LoadingBackdrop';
 import Feedback from '../../../../FeedBack';
-function ExamsForm() {
+function ExamsForm({ userId }) {
   const [cookies] = useCookies();
   const [loading, setLoading] = React.useState(false);
-  const [openBackdropTable, setOpenBackdropTable] = React.useState(false);
-  const [patient, setPatient] = React.useState({
-    fullName: '',
-    _id: ''
-  });
   const [exam, setExam] = React.useState({
     pacient_id: '',
     collectDate: '',
@@ -30,10 +24,6 @@ function ExamsForm() {
   });
 
   const resetFields = () => {
-    setPatient({
-      fullName: '',
-      _id: ''
-    });
     setExam({
       pacient_id: '',
       collectDate: '',
@@ -60,7 +50,7 @@ function ExamsForm() {
   const saveExam = async () => {
     setLoading(true);
     const { userInfo } = cookies;
-    if (!patient._id || !exam.conclusao || !exam.collectDate) {
+    if (!userId || !exam.conclusao || !exam.collectDate) {
       return;
     }
     const response = await prevlabAxiosInstace.exams._postExam(userInfo, exam);
@@ -83,56 +73,28 @@ function ExamsForm() {
 
   const checkExam = async () => {
     const { userInfo } = cookies;
-    if (patient._id === '') {
+    if (userId === '') {
       return;
     }
-    const response = await prevlabAxiosInstace.exams._getExam(
-      userInfo,
-      patient._id
-    );
+    const response = await prevlabAxiosInstace.exams._getExam(userInfo, userId);
     console.log(response.data);
     if (response.data === null || !response.data) {
-      return setExam({ ...exam, patient_id: patient._id });
+      return setExam({ ...exam, userId: userId });
     }
     setExam({ ...response.data });
   };
 
   React.useEffect(() => {
     checkExam();
-  }, [patient._id]);
+  }, [userId]);
 
   return (
     <>
       <Feedback obj={feedback} close={setFeedback} />
       <LoadingBackdrop openClose={loading} />
-      {/* <PatientTable
-        setPatient={setPatient}
-        openBackdropTable={openBackdropTable}
-        setOpenBackdropTable={setOpenBackdropTable}
-      /> */}
       <div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-2">
-            {/* <div className="flex flex-row justify-between  px-4 py-3 bg-gray-50 text-right sm:px-6">
-              <div className="flex-col">
-                <h3 className=" flex text-lg self-start font-medium leading-6 text-gray-900">
-                  Paciente: {patient.fullName}
-                </h3>
-                <p className="flex self-start mt-1 text-sm text-gray-600">
-                  Paciente ID: {patient._id}
-                </p>
-              </div>
-              <div className="flex-col">
-                {!patient._id ? (
-                  <button
-                    onClick={() => setOpenBackdropTable(true)}
-                    className="inline-flex justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Selecionar paciente
-                  </button>
-                ) : null}
-              </div>
-            </div> */}
             <form action="#" method="POST">
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">

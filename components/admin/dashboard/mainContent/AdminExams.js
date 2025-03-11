@@ -9,71 +9,13 @@ import ExamModal from './components/ExamModal';
 import { useState, useEffect } from 'react';
 
 function AdminExams() {
-  const [cookies] = useCookies();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openBackdropTable, setOpenBackdropTable] = React.useState(false);
   const [patient, setPatient] = React.useState({
     fullName: '',
     _id: ''
   });
-  const [exam, setExam] = React.useState({
-    pacient_id: '',
-    collectDate: '',
-    avaliacaoDaAmostra: '',
-    celulaNaoEpiteliais: '',
-    descamacaoDominante: '',
-    alteracoesCelulares: '',
-    celulasMetaplasicas: '',
-    celulasEndocervicais: '',
-    celulasEndometriais: '',
-    floraVaginal: '',
-    agentesEspecificos: '',
-    citolise: '',
-    conclusao: '',
-    observacoes: ''
-  });
-  const saveExam = async () => {
-    setLoading(true);
-    const { userInfo } = cookies;
-    if (!patient._id || !exam.conclusao || !exam.collectDate) {
-      return;
-    }
-    const response = await prevlabAxiosInstace.exams._postExam(userInfo, exam);
-    if (response.data.error) {
-      setLoading(false);
-      return setFeedback({
-        open: true,
-        type: 'error',
-        msg: response.data.msg
-      });
-    }
-    setFeedback({
-      open: true,
-      type: 'success',
-      msg: response.data.msg
-    });
-    resetFields();
-    setLoading(false);
-  };
 
-  const checkExam = async () => {
-    const { userInfo } = cookies;
-    if (patient._id === '') {
-      return;
-    }
-    const response = await prevlabAxiosInstace.exams._getExam(
-      userInfo,
-      patient._id
-    );
-    console.log(response.data);
-    if (response.data === null || !response.data) {
-      return setExam({ ...exam, patient_id: patient._id });
-    }
-    setExam({ ...response.data });
-  };
-  React.useEffect(() => {
-    checkExam();
-  }, [patient._id]);
   return (
     <div className="flex">
       <div className="flex-grow">
@@ -121,7 +63,7 @@ function AdminExams() {
             Novo Exame
           </button>
           <ExamModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-            <ExamsForm />
+            <ExamsForm userId={patient._id} />
           </ExamModal>
         </div>
       </div>
