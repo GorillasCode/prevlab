@@ -4,9 +4,9 @@ export default function ExamModal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-4xl max-h-full overflow-y-auto flex flex-col relative">
+      <div className="bg-white p-4 rounded-lg shadow-lg overflow-y-auto w-full max-w-4xl max-h-full flex flex-col relative">
         <button
-          className="absolute top-2 right-2 text-green-500 hover:text-green-800"
+          className="absolute top-2 right-5 text-green-500 hover:text-green-800"
           onClick={onClose}
         >
           <svg
@@ -25,7 +25,7 @@ export default function ExamModal({ isOpen, onClose, children }) {
             />
           </svg>
         </button>
-        <div>{children}</div>
+        <div className="">{children}</div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ function AdminExams() {
   return (
     <div className="md:grid md:grid-cols-3 md:gap-6">
       <div className="md:col-span-1">
-        <div className="px-4 sm:px-0">
+        <div className="px-4 sm:px-0 border-r bg-[#f3f4f6]">
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             Cadastro de Exames
           </h3>
@@ -51,7 +51,7 @@ function AdminExams() {
           <button
             className={`py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
               patient._id
-                ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
+                ? 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
             onClick={() => setIsModalOpen(true)}

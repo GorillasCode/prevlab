@@ -93,7 +93,7 @@ function ExamsForm({ userId }) {
       <Feedback obj={feedback} close={setFeedback} />
       <LoadingBackdrop openClose={loading} />
       <div>
-        <div className="md:grid md:grid-cols-3 md:gap-6">
+        <div className="md:grid md:grid-cols-2 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-2">
             <form action="#" method="POST">
               <div className="shadow sm:rounded-md sm:overflow-hidden">
