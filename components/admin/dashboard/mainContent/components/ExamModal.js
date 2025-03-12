@@ -9,7 +9,6 @@ export default function ExamModal({ isOpen, onClose, children }) {
           className="absolute top-2 right-2 text-green-500 hover:text-green-800"
           onClick={onClose}
         >
-          <span className="sr-only">Close</span>
           <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
