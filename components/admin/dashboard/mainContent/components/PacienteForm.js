@@ -1,34 +1,34 @@
-import React from "react";
-import { useCookies } from "react-cookie";
-import PatientTable from "./tables/PatientsTable";
-import { prevlabAxiosInstace } from "../../../../../services/prevlabAxios";
-import LoadingBackdrop from "../../../../LoadingBackdrop";
-import FeedBack from "../../../../FeedBack";
+import React from 'react';
+import { useCookies } from 'react-cookie';
+import PatientTable from './tables/PatientsTable';
+import { prevlabAxiosInstace } from '../../../../../services/prevlabAxios';
+import LoadingBackdrop from '../../../../LoadingBackdrop';
+import FeedBack from '../../../../FeedBack';
 function PacientForm() {
   const [cookies] = useCookies();
   const [loading, setLoading] = React.useState(false);
   const [openBackdropTable, setOpenBackdropTable] = React.useState(false);
   const [convenio, setConvenios] = React.useState([]);
   const [patient, setPatient] = React.useState({
-    fullName: "",
+    fullName: '',
     age: 0,
-    solicitante: "",
-    convenio: "",
-    bornDate: "",
+    solicitante: '',
+    convenio: '',
+    bornDate: ''
   });
   const [feedback, setFeedback] = React.useState({
     open: false,
-    type: "success",
-    msg: "feedback",
+    type: 'success',
+    msg: 'feedback'
   });
 
   const resetFields = () => {
     setPatient({
-      fullName: "",
+      fullName: '',
       age: 0,
-      solicitante: "",
-      convenio: "",
-      bornDate: "",
+      solicitante: '',
+      convenio: '',
+      bornDate: ''
     });
     return;
   };
@@ -39,7 +39,7 @@ function PacientForm() {
     if (!response.data) {
       return;
     }
-    let convenios = response.data.map((el) => el.convenio);
+    let convenios = response.data.map(el => el.convenio);
     setConvenios(convenios);
   };
 
@@ -51,21 +51,21 @@ function PacientForm() {
     const { userInfo } = cookies;
     const { _id } = patient;
     const response = await prevlabAxiosInstace.patients[
-      _id ? "_putPatient" : "_postPatient"
+      _id ? '_putPatient' : '_postPatient'
     ](userInfo, patient);
     resetFields();
     setLoading(false);
     if (response.data.error) {
       setFeedback({
         open: true,
-        type: "error",
-        msg: response.data.msg,
+        type: 'error',
+        msg: response.data.msg
       });
     }
     setFeedback({
       open: true,
-      type: "success",
-      msg: response.data.msg,
+      type: 'success',
+      msg: response.data.msg
     });
   };
   const deletePatient = async () => {
@@ -81,14 +81,14 @@ function PacientForm() {
     if (response.data.error) {
       setFeedback({
         open: true,
-        type: "error",
-        msg: response.data.msg,
+        type: 'error',
+        msg: response.data.msg
       });
     }
     setFeedback({
       open: true,
-      type: "success",
-      msg: response.data.msg,
+      type: 'success',
+      msg: response.data.msg
     });
   };
 
@@ -128,17 +128,17 @@ function PacientForm() {
                       htmlFor="company_website"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      {"Nome completo*"}
+                      {'Nome completo*'}
                     </label>
                     <div className="mt-1 flex rounded-md shadow-sm ">
                       <input
                         type="text"
                         name={`company_nomeCompleto`}
                         id={`company_nomeCompleto`}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setPatient({
                             ...patient,
-                            fullName: evt.target.value,
+                            fullName: evt.target.value
                           })
                         }
                         value={patient.fullName}
@@ -162,7 +162,7 @@ function PacientForm() {
                           name={`company_idade`}
                           id={`company_idade`}
                           value={patient.age}
-                          onChange={(evt) =>
+                          onChange={evt =>
                             setPatient({ ...patient, age: evt.target.value })
                           }
                           className="border border-gray-500 p-2 flex-1 block w-full h-10  rounded-r-md sm:text-sm "
@@ -184,10 +184,10 @@ function PacientForm() {
                           id={`company_date`}
                           value={
                             patient.bornDate
-                              ? patient.bornDate.split("T")[0]
+                              ? patient.bornDate.split('T')[0]
                               : patient.bornDate
                           }
-                          onChange={(evt) => {
+                          onChange={evt => {
                             const currentDate = new Date();
                             const age =
                               currentDate.getFullYear() -
@@ -195,7 +195,7 @@ function PacientForm() {
                             setPatient({
                               ...patient,
                               bornDate: evt.target.value,
-                              age,
+                              age
                             });
                           }}
                           className="border border-gray-500 p-2 flex-1 block w-full h-10  rounded-r-md sm:text-sm  "
@@ -210,17 +210,17 @@ function PacientForm() {
                       htmlFor="company_website"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      {"Solicitante"}
+                      {'Solicitante'}
                     </label>
                     <div className="mt-1 flex rounded-md shadow-sm ">
                       <input
                         type="text"
                         name={`company_solicitante`}
                         id={`company_solicitante`}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setPatient({
                             ...patient,
-                            solicitante: evt.target.value,
+                            solicitante: evt.target.value
                           })
                         }
                         value={patient.solicitante}
@@ -234,17 +234,17 @@ function PacientForm() {
                       htmlFor="company_website"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      {"Convênio*"}
+                      {'Convênio*'}
                     </label>
                     <div className="mt-1 flex rounded-md shadow-sm ">
                       <select
-                        type={""}
+                        type={''}
                         name={`company_convenio`}
                         id={`company_convenio`}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setPatient({
                             ...patient,
-                            convenio: evt.target.value,
+                            convenio: evt.target.value
                           })
                         }
                         value={patient.convenio}
@@ -252,7 +252,7 @@ function PacientForm() {
                         placeholder="..."
                       >
                         <option value="PARTICULAR">PARTICULAR</option>
-                        {convenio.map((el) => (
+                        {convenio.map(el => (
                           <option
                             key={el + Math.random().toString()}
                             value={el}

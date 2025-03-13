@@ -1,66 +1,56 @@
-import React from "react";
-import { useCookies } from "react-cookie";
-import PatientTable from "./tables/PatientsTable";
-import { prevlabAxiosInstace } from "../../../../../services/prevlabAxios";
-import LoadingBackdrop from "../../../../LoadingBackdrop";
-import Feedback from "../../../../FeedBack";
-function ExamsForm() {
+import React from 'react';
+import { useCookies } from 'react-cookie';
+import { prevlabAxiosInstace } from '../../../../../services/prevlabAxios';
+import LoadingBackdrop from '../../../../LoadingBackdrop';
+import Feedback from '../../../../FeedBack';
+function ExamsForm({ userId }) {
   const [cookies] = useCookies();
   const [loading, setLoading] = React.useState(false);
-  const [openBackdropTable, setOpenBackdropTable] = React.useState(false);
-  const [patient, setPatient] = React.useState({
-    fullName: "",
-    _id: "",
-  });
   const [exam, setExam] = React.useState({
-    pacient_id: "",
-    collectDate: "",
-    avaliacaoDaAmostra: "",
-    celulaNaoEpiteliais: "",
-    descamacaoDominante: "",
-    alteracoesCelulares: "",
-    celulasMetaplasicas: "",
-    celulasEndocervicais: "",
-    celulasEndometriais: "",
-    floraVaginal: "",
-    agentesEspecificos: "",
-    citolise: "",
-    conclusao: "",
-    observacoes: "",
+    pacient_id: '',
+    collectDate: '',
+    avaliacaoDaAmostra: '',
+    celulaNaoEpiteliais: '',
+    descamacaoDominante: '',
+    alteracoesCelulares: '',
+    celulasMetaplasicas: '',
+    celulasEndocervicais: '',
+    celulasEndometriais: '',
+    floraVaginal: '',
+    agentesEspecificos: '',
+    citolise: '',
+    conclusao: '',
+    observacoes: ''
   });
 
   const resetFields = () => {
-    setPatient({
-      fullName: "",
-      _id: "",
-    });
     setExam({
-      pacient_id: "",
-      collectDate: "",
-      avaliacaoDaAmostra: "",
-      celulaNaoEpiteliais: "",
-      descamacaoDominante: "",
-      alteracoesCelulares: "",
-      celulasMetaplasicas: "",
-      celulasEndocervicais: "",
-      celulasEndometriais: "",
-      floraVaginal: "",
-      agentesEspecificos: "",
-      citolise: "",
-      conclusao: "",
-      observacoes: "",
+      pacient_id: '',
+      collectDate: '',
+      avaliacaoDaAmostra: '',
+      celulaNaoEpiteliais: '',
+      descamacaoDominante: '',
+      alteracoesCelulares: '',
+      celulasMetaplasicas: '',
+      celulasEndocervicais: '',
+      celulasEndometriais: '',
+      floraVaginal: '',
+      agentesEspecificos: '',
+      citolise: '',
+      conclusao: '',
+      observacoes: ''
     });
   };
   const [feedback, setFeedback] = React.useState({
     open: false,
-    type: "success",
-    msg: "feedback",
+    type: 'success',
+    msg: 'feedback'
   });
 
   const saveExam = async () => {
     setLoading(true);
     const { userInfo } = cookies;
-    if (!patient._id || !exam.conclusao || !exam.collectDate) {
+    if (!userId || !exam.conclusao || !exam.collectDate) {
       return;
     }
     const response = await prevlabAxiosInstace.exams._postExam(userInfo, exam);
@@ -68,14 +58,14 @@ function ExamsForm() {
       setLoading(false);
       return setFeedback({
         open: true,
-        type: "error",
-        msg: response.data.msg,
+        type: 'error',
+        msg: response.data.msg
       });
     }
     setFeedback({
       open: true,
-      type: "success",
-      msg: response.data.msg,
+      type: 'success',
+      msg: response.data.msg
     });
     resetFields();
     setLoading(false);
@@ -83,67 +73,28 @@ function ExamsForm() {
 
   const checkExam = async () => {
     const { userInfo } = cookies;
-    if (patient._id === "") {
+    if (userId === '') {
       return;
     }
-    const response = await prevlabAxiosInstace.exams._getExam(
-      userInfo,
-      patient._id
-    );
+    const response = await prevlabAxiosInstace.exams._getExam(userInfo, userId);
     console.log(response.data);
     if (response.data === null || !response.data) {
-      return setExam({ ...exam, patient_id: patient._id });
+      return setExam({ ...exam, userId: userId });
     }
     setExam({ ...response.data });
   };
 
   React.useEffect(() => {
     checkExam();
-  }, [patient._id]);
+  }, [userId]);
 
   return (
     <>
       <Feedback obj={feedback} close={setFeedback} />
       <LoadingBackdrop openClose={loading} />
-      <PatientTable
-        setPatient={setPatient}
-        openBackdropTable={openBackdropTable}
-        setOpenBackdropTable={setOpenBackdropTable}
-      />
       <div>
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-          <div className="md:col-span-1">
-            <div className="px-4 sm:px-0">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
-                Cadastro de Exames
-              </h3>
-              <p className="mt-1 text-sm text-gray-600">
-                This information will be displayed publicly so be careful what
-                you share.
-              </p>
-            </div>
-          </div>
+        <div className="md:grid md:grid-cols-2 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-2">
-            <div className="flex flex-row justify-between  px-4 py-3 bg-gray-50 text-right sm:px-6">
-              <div className="flex-col">
-                <h3 className=" flex text-lg self-start font-medium leading-6 text-gray-900">
-                  Paciente: {patient.fullName}
-                </h3>
-                <p className="flex self-start mt-1 text-sm text-gray-600">
-                  Paciente ID: {patient._id}
-                </p>
-              </div>
-              <div className="flex-col">
-                {!patient._id ? (
-                  <button
-                    onClick={() => setOpenBackdropTable(true)}
-                    className="inline-flex justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Selecionar paciente
-                  </button>
-                ) : null}
-              </div>
-            </div>
             <form action="#" method="POST">
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -159,8 +110,8 @@ function ExamsForm() {
                         type="date"
                         name={`company_date`}
                         id={`company_date`}
-                        value={exam.collectDate.split("T")[0]}
-                        onChange={(evt) =>
+                        value={exam.collectDate.split('T')[0]}
+                        onChange={evt =>
                           setExam({ ...exam, collectDate: evt.target.value })
                         }
                         className="border border-gray-500 p-2 flex-1 block w-full h-10  rounded-r-md sm:text-sm  "
@@ -181,10 +132,10 @@ function ExamsForm() {
                         name={`company_amostra`}
                         id={`company_amostra`}
                         value={exam.avaliacaoDaAmostra}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            avaliacaoDaAmostra: evt.target.value,
+                            avaliacaoDaAmostra: evt.target.value
                           })
                         }
                         list="avaliacaoAmostra"
@@ -213,10 +164,10 @@ function ExamsForm() {
                         name={`company_celulaNaoEpiteliais`}
                         id={`company_celulaNaoEpiteliais`}
                         value={exam.celulaNaoEpiteliais}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            celulaNaoEpiteliais: evt.target.value,
+                            celulaNaoEpiteliais: evt.target.value
                           })
                         }
                         list="naoEpiteliais"
@@ -248,10 +199,10 @@ function ExamsForm() {
                         name={`company_descamacaoDominante`}
                         id={`company_descamacaoDominante`}
                         value={exam.descamacaoDominante}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            descamacaoDominante: evt.target.value,
+                            descamacaoDominante: evt.target.value
                           })
                         }
                         list="descDominante"
@@ -282,10 +233,10 @@ function ExamsForm() {
                         name={`company_alteracoes`}
                         id={`company_alteracoes`}
                         value={exam.alteracoesCelulares}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            alteracoesCelulares: evt.target.value,
+                            alteracoesCelulares: evt.target.value
                           })
                         }
                         list="alteracoesCelulares"
@@ -310,10 +261,10 @@ function ExamsForm() {
                         name={`company_metaplasicas`}
                         id={`company_metaplasicas`}
                         value={exam.celulasMetaplasicas}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            celulasMetaplasicas: evt.target.value,
+                            celulasMetaplasicas: evt.target.value
                           })
                         }
                         list="celulasMetaplasicas"
@@ -339,10 +290,10 @@ function ExamsForm() {
                         name={`company_endocervicais`}
                         id={`company_endocervicais`}
                         value={exam.celulasEndocervicais}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            celulasEndocervicais: evt.target.value,
+                            celulasEndocervicais: evt.target.value
                           })
                         }
                         list="celulasEndocervicais"
@@ -370,10 +321,10 @@ function ExamsForm() {
                         name={`company_endometriais`}
                         id={`company_endometriais`}
                         value={exam.celulasEndometriais}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            celulasEndometriais: evt.target.value,
+                            celulasEndometriais: evt.target.value
                           })
                         }
                         list="celulasEndometriais"
@@ -397,10 +348,10 @@ function ExamsForm() {
                         name={`company_especificos`}
                         id={`company_floraVaginal`}
                         value={exam.floraVaginal}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            floraVaginal: evt.target.value,
+                            floraVaginal: evt.target.value
                           })
                         }
                         list="floraVaginal"
@@ -434,10 +385,10 @@ function ExamsForm() {
                         name={`company_especificos`}
                         id={`company_especificos`}
                         value={exam.agentesEspecificos}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            agentesEspecificos: evt.target.value,
+                            agentesEspecificos: evt.target.value
                           })
                         }
                         list="agentesEspecificos"
@@ -462,10 +413,10 @@ function ExamsForm() {
                         name={`company_citolise`}
                         id={`company_citolise`}
                         value={exam.citolise}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            citolise: evt.target.value,
+                            citolise: evt.target.value
                           })
                         }
                         list="citolise"
@@ -491,10 +442,10 @@ function ExamsForm() {
                         name={`company_conclusao`}
                         id={`company_conclusao`}
                         value={exam.conclusao}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            conclusao: evt.target.value,
+                            conclusao: evt.target.value
                           })
                         }
                         list="conclusao"
@@ -522,10 +473,10 @@ function ExamsForm() {
                         name={`company_observacoes`}
                         id={`company_observacoes`}
                         value={exam.observacoes}
-                        onChange={(evt) =>
+                        onChange={evt =>
                           setExam({
                             ...exam,
-                            observacoes: evt.target.value,
+                            observacoes: evt.target.value
                           })
                         }
                         list="observacoes"
