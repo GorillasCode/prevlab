@@ -189,9 +189,19 @@ function PacientForm() {
                           }
                           onChange={evt => {
                             const currentDate = new Date();
-                            const age =
-                              currentDate.getFullYear() -
-                              new Date(evt.target.value).getFullYear();
+                            const birthDate = new Date(
+                              evt.target.value + 'T00:00:00'
+                            );
+                            const today = new Date();
+                            let age =
+                              today.getFullYear() - birthDate.getFullYear();
+                            const isBeforeBirthday =
+                              today.getMonth() < birthDate.getMonth() ||
+                              (today.getMonth() === birthDate.getMonth() &&
+                                today.getDate() < birthDate.getDate());
+                            if (isBeforeBirthday) {
+                              age--;
+                            }
                             setPatient({
                               ...patient,
                               bornDate: evt.target.value,
