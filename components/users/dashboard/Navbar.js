@@ -87,7 +87,7 @@ function Navbar() {
                     <span className="sr-only">View notifications</span>
                     {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                   </button>
-                  <p className="text-white px-3 py-2 rounded-md text-sm font-medium">
+                  <p className="text-white px-3 py-2 rounded-md text-sm font-medium ">
                     {userDashContext.email}
                   </p>
                   {/* Profile dropdown */}
@@ -179,6 +179,10 @@ function Navbar() {
             </div>
             <div className="pt-4 pb-3 border-t border-green-700">
               <div className="mt-3 px-2 space-y-1">
+                <p className="block px-3 py-2 text-base font-medium text-white">
+                  {userDashContext.email}
+                </p>
+
                 {profile.map((item) => (
                   <button
                     key={item}
@@ -188,6 +192,7 @@ function Navbar() {
                     {item}
                   </button>
                 ))}
+                
               </div>
             </div>
           </Disclosure.Panel>
