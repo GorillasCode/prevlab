@@ -27,7 +27,6 @@ export default function Login() {
       setUserDashContext({ email: "email@email.com", app: "Dashboard" });
     } else {
       setUserDashContext({ email: email.current.value, app: "Dashboard" });
-      console.log(userDashContext.app)
     }
     try {
 
