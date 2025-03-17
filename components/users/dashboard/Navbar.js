@@ -87,7 +87,9 @@ function Navbar() {
                     <span className="sr-only">View notifications</span>
                     {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                   </button>
-
+                  <p className="text-white px-3 py-2 rounded-md text-sm font-medium">
+                    {userDashContext.email}
+                  </p>
                   {/* Profile dropdown */}
                   <Menu as="div" className="ml-3 relative">
                     {({ open }) => (
@@ -148,9 +150,6 @@ function Navbar() {
                   <MenuIcon />
                 </Disclosure.Button>
               </div>
-              <p className="text-white px-3 py-2 rounded-md text-sm font-medium">
-                {userDashContext.email}
-              </p>
             </div>
           </div>
 
