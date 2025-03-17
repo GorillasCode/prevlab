@@ -39,6 +39,7 @@ function Navbar() {
   const changeContext = (appTitle) => {
     setUserDashContext({ app: appTitle });
   };
+
   return (
     <Disclosure as="nav" className="bg-green-800">
       {({ open }) => (
@@ -86,7 +87,9 @@ function Navbar() {
                     <span className="sr-only">View notifications</span>
                     {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                   </button>
-
+                  <p className="text-white px-3 py-2 rounded-md text-sm font-medium">
+                    {userDashContext.email}
+                  </p>
                   {/* Profile dropdown */}
                   <Menu as="div" className="ml-3 relative">
                     {({ open }) => (
