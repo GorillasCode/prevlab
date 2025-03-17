@@ -21,13 +21,7 @@ export default function Login() {
   const handleLogin = async evt => {
     evt.preventDefault();
     setLoading(true);
-    if (
-      email.current.value == null
-    ) {
-      setUserDashContext({ email: "email@email.com", app: "Dashboard" });
-    } else {
-      setUserDashContext({ email: email.current.value, app: "Dashboard" });
-    }
+    setUserDashContext({ email: email.current.value, app: "Dashboard" });
     try {
 
       const loginResponse = await prevlabAxiosInstace.auth._login(
