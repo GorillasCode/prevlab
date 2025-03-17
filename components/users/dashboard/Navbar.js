@@ -39,6 +39,7 @@ function Navbar() {
   const changeContext = (appTitle) => {
     setUserDashContext({ app: appTitle });
   };
+
   return (
     <Disclosure as="nav" className="bg-green-800">
       {({ open }) => (
@@ -147,6 +148,9 @@ function Navbar() {
                   <MenuIcon />
                 </Disclosure.Button>
               </div>
+              <p className="text-white px-3 py-2 rounded-md text-sm font-medium">
+                {userDashContext.email}
+              </p>
             </div>
           </div>
 

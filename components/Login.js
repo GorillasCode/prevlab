@@ -4,10 +4,12 @@ import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import { prevlabAxiosInstace } from '../services/prevlabAxios';
 import FeedBack from '../components/FeedBack';
+import { DashboardUsersContext } from '../context/userContext';
 export default function Login() {
   const email = React.useRef(null);
   const password = React.useRef(null);
   const router = useRouter();
+  const [userDashContext, setUserDashContext] = React.useContext(DashboardUsersContext)
   const [cookies, setCookie, removeCookie] = useCookies();
   const [loading, setLoading] = React.useState(false);
   const [feedback, setFeedback] = React.useState({
@@ -19,7 +21,16 @@ export default function Login() {
   const handleLogin = async evt => {
     evt.preventDefault();
     setLoading(true);
+    if (
+      email.current.value == null
+    ) {
+      setUserDashContext({ email: "email@email.com", app: "Dashboard" });
+    } else {
+      setUserDashContext({ email: email.current.value, app: "Dashboard" });
+      console.log(userDashContext.app)
+    }
     try {
+
       const loginResponse = await prevlabAxiosInstace.auth._login(
         email.current.value,
         password.current.value
@@ -31,14 +42,13 @@ export default function Login() {
           msg: loginResponse.data.msg
         });
       }
-
       setFeedback({
         open: true,
         type: 'success',
         msg: 'Bem vindo!'
       });
       setCookie('userInfo', loginResponse.data.data);
-      return router.push('prevlab/users/dashboard');
+      router.push('prevlab/users/dashboard');
     } catch (error) {
       console.log(error);
       setFeedback({
