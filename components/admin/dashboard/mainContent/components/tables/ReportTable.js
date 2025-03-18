@@ -94,7 +94,7 @@ function ReportTable() {
   }, [update]);
 
   return (
-    <Container maxWidth="lg">
+    <Container  className="overflow-y-auto h-128 ">
       <Feedback obj={feedback} close={setFeedback} />
       <MaterialTable
         title="Relatórios"
