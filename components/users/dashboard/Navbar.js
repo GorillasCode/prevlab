@@ -177,22 +177,26 @@ function Navbar() {
                 )
               )}
             </div>
-            <div className="pt-4 pb-3 border-t border-green-700">
-              <div className="mt-3 px-2 space-y-1">
-                <p className="block px-3 py-2 text-base font-medium text-white">
-                  {userDashContext.email}
-                </p>
+            <div className="pt-2 pb-3 border-t border-green-700">
+              <div className="flex mt-0 px-2">
+                <div className="flex flex-col space-y-1 w-1/2">
+                  {profile.map((item) => (
+                    <button
+                      key={item}
+                      onClick={() => profileActions(item)}
+                      className="w-1/2 px-3 py-2 rounded-md text-base font-medium text-green-400 hover:text-white hover:bg-green-700"
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+                <div className="w-1/2">
+                  <p className="block px-48 py-2 text-base font-medium text-white">
+                    {userDashContext.email}
+                  </p>
+                </div>
 
-                {profile.map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => profileActions(item)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-green-400 hover:text-white hover:bg-green-700"
-                  >
-                    {item}
-                  </button>
-                ))}
-                
+
               </div>
             </div>
           </Disclosure.Panel>
