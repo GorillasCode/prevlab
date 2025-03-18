@@ -7,6 +7,8 @@ import MaterialTable from "material-table";
 import { tableIcons } from "../../../../../iconsTable";
 import Feedback from "../../../../../FeedBack";
 import { JSPDF } from "../../../../../../services/jsPDF";
+import { format } from "date-fns";
+
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -111,6 +113,16 @@ function ReportTable() {
           {
             title: "Liberado em",
             field: "allowedDate",
+            render: (dateLine) =>(
+              <>
+                <div className="flex justify-center">
+                  {dateLine.allowedDate ? format(new Date(dateLine.allowedDate), 'dd/MM/yyyy') : "Não Liberado"}
+                </div>
+                <div className="flex justify-center">
+                  {dateLine.allowedDate ? format(new Date(dateLine.allowedDate), 'HH:mm') : "Não Liberado"}
+                </div>
+              </>
+            ),
           },
         ]}
         data={patients}
