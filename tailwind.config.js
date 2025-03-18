@@ -3,7 +3,6 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      // ALTEREI A ALTURA MAXIMA PRA PODER COLOCAR 32rem 
       height: {
         '128': '32rem'
       },
