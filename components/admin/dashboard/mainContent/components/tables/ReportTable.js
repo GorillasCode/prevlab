@@ -1,18 +1,19 @@
-import React from "react";
-import { useCookies } from "react-cookie";
-import { Container } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { prevlabAxiosInstace } from "../../../../../../services/prevlabAxios";
-import MaterialTable from "material-table";
-import { tableIcons } from "../../../../../iconsTable";
-import Feedback from "../../../../../FeedBack";
-import { JSPDF } from "../../../../../../services/jsPDF";
+import React from 'react';
+import { useCookies } from 'react-cookie';
+import { Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { prevlabAxiosInstace } from '../../../../../../services/prevlabAxios';
+import MaterialTable from 'material-table';
+import { tableIcons } from '../../../../../iconsTable';
+import Feedback from '../../../../../FeedBack';
+import { JSPDF } from '../../../../../../services/jsPDF';
+import { format } from 'date-fns';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
+    color: '#fff'
+  }
 }));
 
 function ReportTable() {
@@ -22,8 +23,8 @@ function ReportTable() {
   const [update, setUpdate] = React.useState(false);
   const [feedback, setFeedback] = React.useState({
     open: false,
-    type: "success",
-    msg: "feedback",
+    type: 'success',
+    msg: 'feedback'
   });
 
   const getPatients = async () => {
@@ -35,8 +36,8 @@ function ReportTable() {
     if (response.data.error) {
       return setFeedback({
         open: true,
-        type: "error",
-        msg: response.data.msg,
+        type: 'error',
+        msg: response.data.msg
       });
     }
 
@@ -44,35 +45,39 @@ function ReportTable() {
     return { data: response.data };
   };
 
-  const allowExam = async (patient) => {
+  const allowExam = async patient => {
     const { userInfo } = cookies;
     try {
+      const formattedDate = patient.allowedDate
+        ? ''
+        : format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
       const response = await prevlabAxiosInstace.patients._putPatient(
         userInfo,
         {
           _id: patient._id,
-          allowedDate: patient.allowedDate ? "" : new Date(),
+          allowedDate: formattedDate
         }
       );
       if (response.data.error) {
         return setFeedback({
           open: true,
-          type: "error",
-          msg: response.data.msg,
+          type: 'error',
+          msg: response.data.msg
         });
       }
       setUpdate(!update);
       setFeedback({
         open: true,
-        type: "success",
-        msg: response.data.msg,
+        type: 'success',
+        msg: response.data.msg
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const printLaudo = async (patient) => {
+  const printLaudo = async patient => {
     const { userInfo } = cookies;
     const { _id } = patient;
 
@@ -96,38 +101,42 @@ function ReportTable() {
         icons={tableIcons}
         columns={[
           {
-            title: "Nome",
-            field: "fullName",
+            title: 'Nome',
+            field: 'fullName'
           },
 
           {
-            title: "Solicitante",
-            field: "solicitante",
+            title: 'Solicitante',
+            field: 'solicitante'
           },
           {
-            title: "Convênio",
-            field: "convenio",
+            title: 'Convênio',
+            field: 'convenio'
           },
           {
-            title: "Liberado em",
-            field: "allowedDate",
-          },
+            title: 'Liberado em',
+            field: 'allowedDate',
+            render: rowData =>
+              rowData.allowedDate
+                ? format(new Date(rowData.allowedDate), 'dd/MM/yyyy HH:mm:ss')
+                : ''
+          }
         ]}
         data={patients}
         actions={[
           {
             icon: tableIcons.LockOpen,
-            tooltip: "Liberar exame",
-            onClick: (event, rowData) => allowExam(rowData),
+            tooltip: 'Liberar exame',
+            onClick: (event, rowData) => allowExam(rowData)
           },
-          (rowData) => ({
+          rowData => ({
             icon: tableIcons.Print,
-            tooltip: "Imprimir",
-            onClick: (event, rowData) => printLaudo(rowData),
-          }),
+            tooltip: 'Imprimir',
+            onClick: (event, rowData) => printLaudo(rowData)
+          })
         ]}
         options={{
-          actionsColumnIndex: -1,
+          actionsColumnIndex: -1
         }}
       />
     </Container>
