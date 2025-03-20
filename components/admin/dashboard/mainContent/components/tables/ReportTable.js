@@ -55,8 +55,6 @@ function ReportTable() {
           ? ""
           : format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
-        console.log(`${patient.fullName} - ${formattedDate}`);
-
         return prevlabAxiosInstace.patients._putPatient(userInfo, {
           _id: patient._id,
           allowedDate: formattedDate
